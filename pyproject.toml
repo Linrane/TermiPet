@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "termipet"
+version = "2.0.0"
+description = "TermiPet 2.0 - 终端电子宠物·浩瀚版"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+    "click>=8.1",
+    "rich>=13.7",
+    "sqlalchemy>=2.0",
+    "toml>=0.10",
+    "apscheduler>=3.10",
+]
+
+[project.scripts]
+pet = "termipet.main:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]

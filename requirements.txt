@@ -1,0 +1,5 @@
+click>=8.1
+rich>=13.7
+sqlalchemy>=2.0
+toml>=0.10
+apscheduler>=3.10
