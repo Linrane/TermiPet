@@ -26,19 +26,20 @@ QUEST_DEFINITIONS: dict[str, dict] = {
 }
 
 ACHIEVEMENT_DEFINITIONS: dict[str, dict] = {
-    "first_adopt":      {"name": "初次领养",     "type": "剧情",   "desc": "领养了第一只灵兽",               "target": 1,  "stardust": 5,  "hidden": False},
-    "first_adventure":  {"name": "踏上旅途",     "type": "剧情",   "desc": "第一次进入迷宫",                 "target": 1,  "stardust": 3,  "hidden": False},
-    "stage_adult":      {"name": "成年礼",       "type": "剧情",   "desc": "宠物成长至成年阶段",             "target": 1,  "stardust": 10, "hidden": False},
-    "stage_legend":     {"name": "传奇降临",     "type": "剧情",   "desc": "宠物成长至传奇阶段",             "target": 1,  "stardust": 50, "hidden": False},
-    "stage_ancient":    {"name": "远古觉醒",     "type": "剧情",   "desc": "宠物成长至远古阶段",             "target": 1,  "stardust": 100,"hidden": False},
-    "feed_100":         {"name": "百次喂食",     "type": "累计",   "desc": "累计喂食 100 次",               "target": 100,"stardust": 20, "hidden": False},
-    "adventure_50":     {"name": "经验丰富",     "type": "累计",   "desc": "累计完成 50 次探险",             "target": 50, "stardust": 30, "hidden": False},
-    "maze_floor10":     {"name": "深渊十层",     "type": "累计",   "desc": "探险到达第 10 层",               "target": 10, "stardust": 40, "hidden": False},
-    "full_skills":      {"name": "全技能",       "type": "累计",   "desc": "学习所有通用技能",               "target": 8,  "stardust": 50, "hidden": False},
-    "rich_1000":        {"name": "小富翁",       "type": "累计",   "desc": "金币达到 1000",                  "target": 1000,"stardust":15, "hidden": False},
-    "health_0":         {"name": "大难不死",     "type": "隐藏",   "desc": "健康值降至 0 后恢复",            "target": 1,  "stardust": 20, "hidden": True},
-    "night_adventure":  {"name": "夜枭",         "type": "隐藏",   "desc": "在午夜 12 点进行探险",           "target": 1,  "stardust": 15, "hidden": True},
-    "craft_legend":     {"name": "传奇工匠",     "type": "隐藏",   "desc": "制作出传说级物品",               "target": 1,  "stardust": 60, "hidden": True},
+    # type: story/cumulative/hidden
+    "first_adopt":      {"name": "初次领养",     "type": "story",     "desc": "领养了第一只灵兽",               "target": 1,  "stardust": 5,  "hidden": False},
+    "first_adventure":  {"name": "踏上旅途",     "type": "story",     "desc": "第一次进入迷宫",                 "target": 1,  "stardust": 3,  "hidden": False},
+    "stage_adult":      {"name": "成年礼",       "type": "story",     "desc": "宠物成长至成年阶段",             "target": 1,  "stardust": 10, "hidden": False},
+    "stage_legend":     {"name": "传奇降临",     "type": "story",     "desc": "宠物成长至传奇阶段",             "target": 1,  "stardust": 50, "hidden": False},
+    "stage_ancient":    {"name": "远古觉醒",     "type": "story",     "desc": "宠物成长至远古阶段",             "target": 1,  "stardust": 100,"hidden": False},
+    "feed_100":         {"name": "百次喂食",     "type": "cumulative","desc": "累计喂食 100 次",               "target": 100,"stardust": 20, "hidden": False},
+    "adventure_50":     {"name": "经验丰富",     "type": "cumulative","desc": "累计完成 50 次探险",             "target": 50, "stardust": 30, "hidden": False},
+    "maze_floor10":     {"name": "深渊十层",     "type": "cumulative","desc": "探险到达第 10 层",               "target": 10, "stardust": 40, "hidden": False},
+    "full_skills":      {"name": "全技能",       "type": "cumulative","desc": "学习所有通用技能",               "target": 8,  "stardust": 50, "hidden": False},
+    "rich_1000":        {"name": "小富翁",       "type": "cumulative","desc": "金币达到 1000",                  "target": 1000,"stardust":15, "hidden": False},
+    "health_0":         {"name": "大难不死",     "type": "hidden",    "desc": "健康值降至 0 后恢复",            "target": 1,  "stardust": 20, "hidden": True},
+    "night_adventure":  {"name": "夜枭",         "type": "hidden",    "desc": "在午夜 12 点进行探险",           "target": 1,  "stardust": 15, "hidden": True},
+    "craft_legend":     {"name": "传奇工匠",     "type": "hidden",    "desc": "制作出传说级物品",               "target": 1,  "stardust": 60, "hidden": True},
 }
 
 

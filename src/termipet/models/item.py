@@ -16,7 +16,7 @@ class Item(Base):
     key = Column(String(64), unique=True, nullable=False)
     name = Column(String(64), nullable=False)
     item_type = Column(String(32), default="consumable")   # consumable/material/equipment/collectible
-    rarity = Column(String(16), default="普通")           # 普通/稀有/传说
+    rarity = Column(String(16), default="common")           # common/rare/legendary
     description = Column(Text, default="")
 
     # 效果 JSON {stat: delta, ...}

@@ -51,19 +51,14 @@ class Home(Base):
 
     def room_status(self) -> dict[str, int]:
         return {
-            "卧室": self.bedroom_level,
-            "厨房": self.kitchen_level,
-            "工坊": self.workshop_level,
-            "花园": self.garden_level,
-            "图书室": self.library_level,
+            "bedroom": self.bedroom_level,
+            "kitchen": self.kitchen_level,
+            "workshop": self.workshop_level,
+            "garden": self.garden_level,
+            "library": self.library_level,
         }
 
     ROOM_KEYS = {
-        "卧室": "bedroom_level",
-        "厨房": "kitchen_level",
-        "工坊": "workshop_level",
-        "花园": "garden_level",
-        "图书室": "library_level",
         "bedroom": "bedroom_level",
         "kitchen": "kitchen_level",
         "workshop": "workshop_level",
@@ -72,44 +67,43 @@ class Home(Base):
     }
 
     UPGRADE_COSTS = {
-        # room_key: {level: (coins, {item_name: qty})}
-        # 使用与 seeds.py 物品名完全一致的名称
+        # room_key: {level: (coins, {item_key: qty})}
         "bedroom_level":  {
             1: (0, {}),
-            2: (50,  {"皮革": 2}),
-            3: (150, {"皮革": 5, "数据碎片": 1}),
-            4: (300, {"数据碎片": 3}),
-            5: (600, {"魔法水晶": 1}),
+            2: (50,  {"leather": 2}),
+            3: (150, {"leather": 5, "data_shard": 1}),
+            4: (300, {"data_shard": 3}),
+            5: (600, {"magic_crystal": 1}),
         },
         "kitchen_level":  {
             1: (0, {}),
-            2: (60,  {"铁锭": 2}),
-            3: (180, {"铁锭": 3, "数据碎片": 1}),
-            4: (350, {"数据碎片": 3, "魔法粉末": 2}),
-            5: (700, {"魔法水晶": 1}),
+            2: (60,  {"iron_ingot": 2}),
+            3: (180, {"iron_ingot": 3, "data_shard": 1}),
+            4: (350, {"data_shard": 3, "magic_powder": 2}),
+            5: (700, {"magic_crystal": 1}),
         },
         "workshop_level": {
             0: (0, {}),
-            1: (80,  {"铁锭": 3, "皮革": 2}),
-            2: (200, {"铁锭": 5, "数据碎片": 2}),
-            3: (400, {"数据碎片": 5, "魔法粉末": 2}),
-            4: (800, {"魔法水晶": 2}),
-            5: (1500, {"魔法水晶": 5}),
+            1: (80,  {"iron_ingot": 3, "leather": 2}),
+            2: (200, {"iron_ingot": 5, "data_shard": 2}),
+            3: (400, {"data_shard": 5, "magic_powder": 2}),
+            4: (800, {"magic_crystal": 2}),
+            5: (1500, {"magic_crystal": 5}),
         },
         "garden_level":   {
             0: (0, {}),
-            1: (50,  {"皮革": 3}),
-            2: (120, {"草药": 5, "数据碎片": 1}),
-            3: (250, {"数据碎片": 3, "魔法粉末": 1}),
-            4: (500, {"魔法水晶": 1}),
-            5: (1000, {"魔法水晶": 3}),
+            1: (50,  {"leather": 3}),
+            2: (120, {"herb": 5, "data_shard": 1}),
+            3: (250, {"data_shard": 3, "magic_powder": 1}),
+            4: (500, {"magic_crystal": 1}),
+            5: (1000, {"magic_crystal": 3}),
         },
         "library_level":  {
             0: (0, {}),
-            1: (100, {"纸张": 5, "墨水": 3}),
-            2: (250, {"纸张": 10, "数据碎片": 2}),
-            3: (500, {"数据碎片": 5, "魔法粉末": 3}),
-            4: (1000, {"魔法水晶": 2}),
-            5: (2000, {"魔法水晶": 5, "星辰金属": 1}),
+            1: (100, {"paper": 5, "ink": 3}),
+            2: (250, {"paper": 10, "data_shard": 2}),
+            3: (500, {"data_shard": 5, "magic_powder": 3}),
+            4: (1000, {"magic_crystal": 2}),
+            5: (2000, {"magic_crystal": 5, "star_metal": 1}),
         },
     }

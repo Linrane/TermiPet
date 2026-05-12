@@ -1,4 +1,4 @@
-"""TermiPet 2.0 — CLI 主入口"""
+"""TermiPet 2.2 — CLI main entry"""
 from __future__ import annotations
 
 import sys
@@ -9,20 +9,28 @@ from rich.panel import Panel
 from rich.text import Text
 from rich import box
 
+from termipet.locale import t, set_locale, get_lang
+
 console = Console()
 
+# Initialize locale at module level (before CLI docs are computed)
+try:
+    set_locale()
+except Exception:
+    pass
 
-# ── 全局初始化（每次启动时执行） ──────────────────────────────────────────────
+
+# ── Global startup init ─────────────────────────────────────────────────────
 def _startup_init() -> None:
-    """确保数据库和种子数据已初始化"""
+    """Initialize database and seed data"""
     try:
         from termipet.utils.seeds import initialize_game
         initialize_game()
     except Exception as e:
-        console.print(f"[yellow]⚠ 初始化警告：{e}[/yellow]")
+        console.print(f"[yellow]{t('cli.init_warning', error=str(e))}[/yellow]")
 
 
-# ── 启动横幅 ─────────────────────────────────────────────────────────────────
+# ── Banner ─────────────────────────────────────────────────────────────────
 BANNER = r"""
   ______  _________  ______  __  __  _____  ____   _____  ______
  /_  __/ / _____  / / ___  |/  |/  |/_  _/ / __ \ / __  |/_  __/
@@ -31,41 +39,52 @@ BANNER = r"""
                                          /_/
 """
 
-BANNER_SIMPLE = "✦ TermiPet 2.1  终端电子宠物·浩瀚版 ✦"
-
 
 def print_banner():
     console.print(Panel(
-        f"[bold cyan]{BANNER_SIMPLE}[/bold cyan]\n"
-        f"[dim]数字生命守护者，在终端中书写灵兽的传说[/dim]",
+        f"[bold cyan]{t('banner.title')}[/bold cyan]\n"
+        f"[dim]{t('banner.subtitle')}[/dim]",
         border_style="cyan",
         box=box.DOUBLE,
         padding=(0, 2),
     ))
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  主命令组
-# ══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
+#  Main command group
+# ═════════════════════════════════════════════════════════════════════════════
 @click.group(
     context_settings={"help_option_names": ["-h", "--help"]},
     invoke_without_command=True,
 )
+@click.option("--lang", default=None, help="Language: zh / en")
 @click.pass_context
-def cli(ctx):
+def cli(ctx, lang: str | None):
     """
-    TermiPet 2.1 — 终端电子宠物·浩瀚版
+    TermiPet 2.2 — Terminal Spirit Companion
 
     \b
-    快速开始：
-      pet adopt cat --name 小橘     领养一只猫型灵兽
-      pet status                    查看宠物状态
-      pet feed                      喂食
-      pet play                      玩耍
-      pet adventure start           开始探险
+    {quick_start}
+      {adopt_example}
+      {status_example}
+      {feed_example}
+      {play_example}
+      {adventure_example}
 
-    使用 pet <命令> --help 查看详细用法。
-    """
+    {help_hint}
+    """.format(
+        quick_start=t("cli.quick_start"),
+        adopt_example=t("cli.adopt_example"),
+        status_example=t("cli.status_example"),
+        feed_example=t("cli.feed_example"),
+        play_example=t("cli.play_example"),
+        adventure_example=t("cli.adventure_example"),
+        help_hint=t("cli.help_hint"),
+    )
+    if lang:
+        from termipet.locale import set_locale
+        set_locale(lang)
+
     _startup_init()
 
     if ctx.invoked_subcommand is None:
@@ -108,17 +127,17 @@ def _register_commands():
         cli.add_command(daily_group,     "daily")
 
     except ImportError as e:
-        console.print(f"[red]命令加载失败：{e}[/red]")
+        console.print(f"[red]{t('cli.cmd_load_fail', error=str(e))}[/red]")
         sys.exit(1)
 
 
 _register_commands()
 
 
-# ── 额外便捷命令 ──────────────────────────────────────────────────────────────
+# ── Convenience commands ────────────────────────────────────────────────────
 @cli.command("info")
 def info_cmd():
-    """显示游戏信息和帮助"""
+    """Show game info and help"""
     print_banner()
     console.print()
 
@@ -137,15 +156,15 @@ def info_cmd():
             panel = build_status_panel(pet, show_extended=False)
             console.print(panel)
         else:
-            console.print("[dim]还没有宠物，使用 [bold]pet adopt <物种>[/bold] 领养一只灵兽！[/dim]")
-            console.print("[dim]可用物种：cat、dog、bird、mech、mystery[/dim]")
+            console.print(f"[dim]{t('common.no_pet_adopt', cmd='pet adopt <species>')}[/dim]")
+            console.print(f"[dim]{t('common.available_species')}[/dim]")
     finally:
         session.close()
 
 
 @cli.command("list-pets")
 def list_pets_cmd():
-    """查看所有已领养的宠物"""
+    """List all adopted pets"""
     from termipet.database import get_session
     from termipet.models.pet import Pet
     from rich.table import Table
@@ -154,25 +173,28 @@ def list_pets_cmd():
     try:
         pets = session.query(Pet).all()
         if not pets:
-            console.print("[dim]还没有任何宠物。[/dim]")
+            console.print(f"[dim]{t('common.no_pets')}[/dim]")
             return
 
-        table = Table(title="🐾 已领养的灵兽", box=box.ROUNDED, border_style="cyan")
-        table.add_column("ID", width=4)
-        table.add_column("名字", style="bold", width=12)
-        table.add_column("物种", width=10)
-        table.add_column("阶段", width=8)
-        table.add_column("年龄", width=8)
-        table.add_column("状态", width=8)
+        table = Table(
+            title=t("common.adopted_pets"),
+            box=box.ROUNDED, border_style="cyan",
+        )
+        table.add_column(t("headers.id"), width=4)
+        table.add_column(t("headers.name"), style="bold", width=12)
+        table.add_column(t("headers.species"), width=10)
+        table.add_column(t("headers.stage"), width=8)
+        table.add_column(t("headers.age"), width=8)
+        table.add_column(t("headers.status"), width=8)
 
         for p in pets:
-            active = "[bold green]活跃[/bold green]" if p.is_active else "[dim]休眠[/dim]"
+            active = f"[bold green]{t('headers.active')}[/bold green]" if p.is_active else f"[dim]{t('headers.dormant')}[/dim]"
             from termipet.display.status_panel import _get_species_name
             table.add_row(
                 str(p.id), p.name,
                 _get_species_name(p.species_key),
                 p.stage,
-                f"{p.age_days:.1f}天",
+                f"{p.age_days:.1f}{t('data.day_suffix')}",
                 active,
             )
 
@@ -184,25 +206,24 @@ def list_pets_cmd():
 @cli.command("switch")
 @click.argument("pet_id", type=int)
 def switch_cmd(pet_id: int):
-    """切换活跃宠物（指定ID）"""
+    """Switch active pet by ID"""
     from termipet.database import get_session
     from termipet.models.pet import Pet
 
     session = get_session()
     try:
-        # 取消当前活跃
         current = session.query(Pet).filter_by(is_active=True).first()
         if current:
             current.is_active = False
 
         target = session.get(Pet, pet_id)
         if target is None:
-            console.print(f"[red]✗ 没有 ID 为 {pet_id} 的宠物。使用 pet list-pets 查看所有宠物。[/red]")
+            console.print(f"[red]{t('common.not_found', id=pet_id)}[/red]")
             return
 
         target.is_active = True
         session.commit()
-        console.print(f"[green]✓ 已切换到「{target.name}」。[/green]")
+        console.print(f"[green]{t('common.switch_success', name=target.name)}[/green]")
     finally:
         session.close()
 

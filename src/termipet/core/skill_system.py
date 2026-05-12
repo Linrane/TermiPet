@@ -99,7 +99,7 @@ class SkillSystem:
             if skill.skill_key not in SKILL_DEFINITIONS:
                 continue
             defn = SKILL_DEFINITIONS[skill.skill_key]
-            if defn["type"] == "被动":
+            if defn["type"] == "passive":
                 for k, v in defn["effect"].items():
                     if isinstance(v, (int, float)):
                         bonuses[k] = bonuses.get(k, 0) + v * skill.level

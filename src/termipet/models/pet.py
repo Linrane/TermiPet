@@ -65,9 +65,9 @@ class Pet(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(64), nullable=False)
     species_key = Column(String(32), ForeignKey("species.key"), nullable=False)
-    personality = Column(String(32), default="沉稳")
+    personality = Column(String(32), default="calm")
     talent = Column(String(64), default="")
-    stage = Column(String(16), default="蛋")    # 蛋/幼年/少年/成年/巅峰/传奇/远古
+    stage = Column(String(16), default="egg")    # egg/youth/teen/adult/peak/legend/ancient
     age_days = Column(Float, default=0.0)
     experience = Column(Float, default=0.0)
     skill_points = Column(Integer, default=0)
@@ -130,20 +130,20 @@ class Pet(Base):
         self.current_maze_progress = json.dumps(val, ensure_ascii=False)
 
     # ── 阶段系统 ─────────────────────────────────────────────────────────────
-    STAGES = ["蛋", "幼年", "少年", "成年", "巅峰", "传奇", "远古"]
+    STAGES = ["egg", "youth", "teen", "adult", "peak", "legend", "ancient"]
     STAGE_THRESHOLDS = {
-        "蛋": 0,
-        "幼年": 1,
-        "少年": 7,
-        "成年": 30,
-        "巅峰": 90,
-        "传奇": 180,
-        "远古": 365,
+        "egg": 0,
+        "youth": 1,
+        "teen": 7,
+        "adult": 30,
+        "peak": 90,
+        "legend": 180,
+        "ancient": 365,
     }
 
     def compute_stage(self) -> str:
         """根据年龄天数计算应处于的阶段"""
-        stage = "蛋"
+        stage = "egg"
         for s, days in self.STAGE_THRESHOLDS.items():
             if self.age_days >= days:
                 stage = s
@@ -152,14 +152,14 @@ class Pet(Base):
     def stat_summary(self) -> dict[str, Any]:
         """返回所有属性的 dict（方便传给 UI）"""
         return {
-            "饱腹": self.hunger,
-            "快乐": self.happiness,
-            "清洁": self.cleanliness,
-            "健康": self.health,
-            "精力": self.energy,
-            "智力": self.intelligence,
-            "亲密": self.bond,
-            "体质": self.constitution,
+            "hunger": self.hunger,
+            "happiness": self.happiness,
+            "cleanliness": self.cleanliness,
+            "health": self.health,
+            "energy": self.energy,
+            "intelligence": self.intelligence,
+            "bond": self.bond,
+            "constitution": self.constitution,
         }
 
     def __repr__(self) -> str:

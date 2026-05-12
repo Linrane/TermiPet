@@ -1,4 +1,4 @@
-"""宠物管理器 — 属性衰减、成长、互动核心逻辑"""
+"""宠物管理器 — 属性衰减、成长、互动核心逻辑 (Bilingual)"""
 from __future__ import annotations
 
 import random
@@ -12,6 +12,7 @@ from termipet.models.home import Home
 from termipet.models.item import Item, Inventory
 from termipet.models.quest import Quest, Achievement, QUEST_DEFINITIONS, ACHIEVEMENT_DEFINITIONS
 from termipet.models.story import StoryFragment, STORY_FRAGMENTS
+from termipet.locale import t as L
 from termipet import config as cfg
 
 
@@ -63,26 +64,39 @@ class PetManager:
         """获取活跃宠物，不存在则抛出 ValueError"""
         pet = self.get_active_pet()
         if pet is None:
-            raise ValueError("还没有宠物！请先使用 [bold cyan]pet adopt[/] 命令领养一只灵兽。")
+            raise ValueError(L("pet_manager.no_pet"))
         return pet
 
     # ── 领养 ──────────────────────────────────────────────────────────────────
     def adopt(self, species_key: str, name: str) -> Pet:
         """领养新宠物"""
-        # 验证物种
+        # 验证并模糊匹配物种
+        species_key = species_key.strip().lower()
         species = self.session.query(Species).filter_by(key=species_key).first()
         if species is None:
-            available = [s.key for s in self.session.query(Species).all()]
-            raise ValueError(
-                f"未知物种 '{species_key}'。\n可用物种：{', '.join(available) or '暂无数据，请先初始化游戏数据'}"
-            )
+            # 模糊匹配：尝试部分匹配
+            all_species = self.session.query(Species).all()
+            for s in all_species:
+                if species_key in s.key:
+                    species = s
+                    break
+            if species is None:
+                available = [s.key for s in all_species]
+                raise ValueError(
+                    L("pet_manager.unknown_species", species=species_key,
+                      species_list=', '.join(available) or L("data.no_data"))
+                )
 
         # 验证名字
         name = name.strip()
         if not name:
-            raise ValueError("宠物名字不能为空！")
+            raise ValueError(L("pet_manager.empty_name"))
+        # Sanitize: remove control characters, limit length
+        name = ''.join(c for c in name if c.isprintable())
         if len(name) > 20:
-            raise ValueError("宠物名字不能超过 20 个字符！")
+            raise ValueError(L("pet_manager.long_name"))
+        if not name:
+            raise ValueError(L("pet_manager.empty_name"))
 
         # 将现有宠物设为非活跃
         existing = self.session.query(Pet).filter_by(is_active=True).first()
@@ -222,10 +236,10 @@ class PetManager:
                     .first()
                 )
             if inv_entry is None:
-                raise ValueError(f"背包中没有 '{item_key}'，请先购买或制作。")
+                raise ValueError(L("pet_manager.no_item", item=item_key))
             item = inv_entry.item
             if item.item_type not in ("consumable", "food"):
-                raise ValueError(f"'{item.name}' 不是食物，无法喂给宠物。")
+                raise ValueError(L("pet_manager.not_food", item=item.name))
 
             effects = item.effects
             for stat, val in effects.items():
@@ -255,7 +269,7 @@ class PetManager:
         self.apply_decay(pet)
 
         if pet.energy < 10:
-            raise ValueError(f"{pet.name} 太累了，精力只剩 {pet.energy:.0f}！先让它休息吧。")
+            raise ValueError(L("pet_manager.too_tired", name=pet.name, energy=pet.energy))
 
         energy_cost = random.uniform(8, 15)
         happiness_gain = random.uniform(15, 25)
@@ -322,12 +336,12 @@ class PetManager:
 
     def spend_coins(self, pet: Pet, amount: int) -> None:
         if pet.coins < amount:
-            raise ValueError(f"金币不足！需要 {amount} 金币，当前只有 {pet.coins} 金币。")
+            raise ValueError(L("pet_manager.no_coins", need=amount, have=pet.coins))
         pet.coins -= amount
 
     def spend_stardust(self, pet: Pet, amount: int) -> None:
         if pet.stardust < amount:
-            raise ValueError(f"星尘不足！需要 {amount} 星尘，当前只有 {pet.stardust} 星尘。")
+            raise ValueError(L("pet_manager.no_stardust", need=amount, have=pet.stardust))
         pet.stardust -= amount
 
     # ── 内部工具 ─────────────────────────────────────────────────────────────

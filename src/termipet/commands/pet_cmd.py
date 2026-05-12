@@ -1,4 +1,4 @@
-"""宠物基础命令 — adopt, status, feed, play, clean, sleep, train, skill"""
+"""宠物基础命令 — adopt, status, feed, play, clean, sleep, train, skill (Bilingual)"""
 from __future__ import annotations
 
 import sys
@@ -15,6 +15,7 @@ from termipet.models.pet import Pet, Species
 from termipet.core.pet_manager import PetManager
 from termipet.core.skill_system import SkillSystem
 from termipet.core.events import EventManager
+from termipet.locale import t as L
 from termipet.display.status_panel import (
     build_status_panel, live_status,
     print_success, print_error, print_warning, print_info, print_event_box, console
@@ -32,7 +33,7 @@ def safe_cmd(func):
             print_error(str(e))
             sys.exit(0)
         except Exception as e:
-            print_error(f"发生了一个意外错误：{e}")
+            print_error(L("common.error_unexpected", error=str(e)))
             sys.exit(0)
     return wrapper
 
@@ -45,42 +46,42 @@ def safe_cmd(func):
 @click.option("--name", "-n", default="", help="宠物名字")
 @safe_cmd
 def adopt_cmd(species: str, name: str):
-    """领养一只新灵兽"""
+    """Adopt a new spirit companion"""
     session = get_session()
     try:
         pm = PetManager(session)
 
-        # 如果没提供名字，交互式询问
         if not name:
-            name = click.prompt("请给你的灵兽取个名字", default="小灵")
+            name = click.prompt(L("adopt.name_prompt"), default=L("adopt.name_default"))
 
-        # 检查是否已有宠物
         existing = pm.get_active_pet()
         if existing:
             try:
                 confirmed = click.confirm(
-                    f"你已有宠物「{existing.name}」，领养新宠物会将其设为非活跃状态，确定吗？",
+                    L("adopt.has_pet_confirm", name=existing.name),
                     default=False
                 )
             except click.exceptions.Abort:
-                print_info("已取消。")
+                print_info(L("common.cancelled"))
                 return
             if not confirmed:
-                print_info("已取消。")
+                print_info(L("common.cancelled"))
                 return
 
-        with console.status(f"[cyan]正在召唤 {species} 灵兽……[/cyan]", spinner="dots"):
+        with console.status(
+            f"[cyan]{L('adopt.summoning', species=species)}[/cyan]", spinner="dots"
+        ):
             time.sleep(1.2)
             pet = pm.adopt(species_key=species.lower(), name=name)
 
         console.print()
         console.print(Panel(
-            f"[bold cyan]恭喜！你领养了一只 {_species_name(species)} 灵兽！[/bold cyan]\n"
-            f"名字：[bold yellow]{pet.name}[/bold yellow]\n"
-            f"性格：{pet.personality}  天赋：[italic]{pet.talent}[/italic]\n\n"
-            f"[dim]它目前还是一颗蛋，请耐心等待孵化……[/dim]\n"
-            f"[dim]使用 [bold]pet status[/bold] 查看状态，[bold]pet feed[/bold] 喂食。[/dim]",
-            title="✨ 领养成功 ✨",
+            L("adopt.success_body",
+              species_name=_species_name(species),
+              name=pet.name,
+              personality=L(f"data.personalities.{pet.personality}", pet.personality),
+              talent=L(f"data.talents.{pet.talent}", pet.talent)),
+            title=L("adopt.success_title"),
             border_style="bright_cyan",
             box=box.DOUBLE,
             padding=(1, 2),
@@ -90,8 +91,7 @@ def adopt_cmd(species: str, name: str):
 
 
 def _species_name(key: str) -> str:
-    names = {"cat": "猫型", "dog": "犬型", "bird": "鸟型", "mech": "机械型", "mystery": "神秘型"}
-    return names.get(key.lower(), key)
+    return L(f"data.species.{key.lower()}", key)
 
 
 # ══════════════════════════════════════════════════════════════════════════════

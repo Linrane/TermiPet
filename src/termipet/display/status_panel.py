@@ -1,4 +1,4 @@
-"""状态面板 — 宠物状态的 rich 可视化"""
+"""状态面板 — 宠物状态的 rich 可视化 (Bilingual)"""
 from __future__ import annotations
 
 import time
@@ -16,7 +16,8 @@ from rich.table import Table
 from rich.text import Text
 
 from termipet.display.ascii_library import get_art, get_mood_emoji, get_hunger_emoji, get_species_color
-from termipet.display.themes import t
+from termipet.display.themes import t as theme
+from termipet.locale import t as L
 from termipet.models.pet import Pet
 
 
@@ -73,27 +74,31 @@ def build_status_panel(pet: Pet, show_extended: bool = True) -> Panel:
 
     # ── 属性列 ────────────────────────────────────────────────────────────────
     stats_lines = []
-    stats_lines.append(_stat_row("饱腹", pet.hunger))
-    stats_lines.append(_stat_row("快乐", pet.happiness))
-    stats_lines.append(_stat_row("清洁", pet.cleanliness))
-    stats_lines.append(_stat_row("健康", pet.health))
+    stats_lines.append(_stat_row(L("data.stats.hunger"), pet.hunger))
+    stats_lines.append(_stat_row(L("data.stats.happiness"), pet.happiness))
+    stats_lines.append(_stat_row(L("data.stats.cleanliness"), pet.cleanliness))
+    stats_lines.append(_stat_row(L("data.stats.health"), pet.health))
 
     if show_extended:
         stats_lines.append("─" * 28)
-        stats_lines.append(_stat_row("精力", pet.energy))
-        stats_lines.append(_stat_row("智力", pet.intelligence))
-        stats_lines.append(_stat_row("亲密", pet.bond))
-        stats_lines.append(_stat_row("体质", pet.constitution))
+        stats_lines.append(_stat_row(L("data.stats.energy"), pet.energy))
+        stats_lines.append(_stat_row(L("data.stats.intelligence"), pet.intelligence))
+        stats_lines.append(_stat_row(L("data.stats.bond"), pet.bond))
+        stats_lines.append(_stat_row(L("data.stats.constitution"), pet.constitution))
 
     stats_text = "\n".join(stats_lines)
 
     # ── 信息列 ────────────────────────────────────────────────────────────────
+    stage_trans = L(f"data.stages.{pet.stage}", pet.stage)
     stage_colors = {
         "蛋": "dim", "幼年": "green", "少年": "cyan",
         "成年": "yellow", "巅峰": "bright_yellow",
         "传奇": "magenta", "远古": "bright_magenta",
+        "Egg": "dim", "Youth": "green", "Teen": "cyan",
+        "Adult": "yellow", "Peak": "bright_yellow",
+        "Legend": "magenta", "Ancient": "bright_magenta",
     }
-    stage_color = stage_colors.get(pet.stage, "white")
+    stage_color = stage_colors.get(stage_trans, "white")
 
     now = datetime.now(timezone.utc)
     last_updated = pet.last_updated
@@ -102,37 +107,35 @@ def build_status_panel(pet: Pet, show_extended: bool = True) -> Panel:
     elapsed_min = int((now - last_updated).total_seconds() / 60)
 
     info_lines = [
-        f"[bold]物种[/bold]  {_get_species_name(pet.species_key)}",
-        f"[bold]阶段[/bold]  [{stage_color}]{pet.stage}[/{stage_color}]",
-        f"[bold]性格[/bold]  {pet.personality}",
-        f"[bold]天赋[/bold]  [italic]{pet.talent or '未知'}[/italic]",
-        f"[bold]年龄[/bold]  {pet.age_days:.1f} 天",
-        f"[bold]经验[/bold]  {pet.experience:.0f}",
-        f"[bold]技能点[/bold] {pet.skill_points}",
+        f"[bold]{L('status_panel.label_species')}[/bold]  {_get_species_name(pet.species_key)}",
+        f"[bold]{L('status_panel.label_stage')}[/bold]  [{stage_color}]{stage_trans}[/{stage_color}]",
+        f"[bold]{L('status_panel.label_personality')}[/bold]  {pet.personality}",
+        f"[bold]{L('status_panel.label_talent')}[/bold]  [italic]{pet.talent or L('status_panel.unknown')}[/italic]",
+        f"[bold]{L('status_panel.label_age')}[/bold]  {pet.age_days:.1f} {L('data.day_suffix')}",
+        f"[bold]{L('status_panel.label_exp')}[/bold]  {pet.experience:.0f}",
+        f"[bold]{L('status_panel.label_skill_points')}[/bold] {pet.skill_points}",
         "─" * 20,
-        f"[bold yellow]金币[/bold yellow]  {pet.coins} 🪙",
-        f"[bold bright_cyan]星尘[/bold bright_cyan]  {pet.stardust} ✨",
+        f"[bold yellow]{L('status_panel.coins_label')}[/bold yellow]  {pet.coins} 🪙",
+        f"[bold bright_cyan]{L('status_panel.stardust_label')}[/bold bright_cyan]  {pet.stardust} ✨",
         "─" * 20,
-        f"心情  {mood_e}  饱食  {hunger_e}",
-        f"[dim]({elapsed_min}分钟前更新)[/dim]",
+        f"{L('status_panel.mood')}  {mood_e}  {L('status_panel.hunger_status')}  {hunger_e}",
+        f"[dim]({elapsed_min}{L('status_panel.last_updated', minutes='')})[/dim]",
     ]
 
     info_text = "\n".join(info_lines)
 
     # ── 组合布局 ──────────────────────────────────────────────────────────────
-    left = Panel(art_panel, border_style="dim", padding=0)
-
     stats_panel = Panel(
         stats_text,
-        title="[bold]属性[/bold]",
-        border_style=t("border"),
+        title=f"[bold]{L('status_panel.stats_panel')}[/bold]",
+        border_style=theme("border"),
         padding=(0, 1),
     )
 
     info_panel = Panel(
         info_text,
-        title="[bold]信息[/bold]",
-        border_style=t("border"),
+        title=f"[bold]{L('status_panel.info_panel')}[/bold]",
+        border_style=theme("border"),
         padding=(0, 1),
     )
 
@@ -145,7 +148,7 @@ def build_status_panel(pet: Pet, show_extended: bool = True) -> Panel:
 
     outer_panel = Panel(
         inner_table,
-        title=f"[bold {species_color}]✦ {pet.name} 的状态 ✦[/bold {species_color}]",
+        title=f"[bold {species_color}]✦ {L('status_panel.title', name=pet.name)} ✦[/bold {species_color}]",
         border_style=species_color,
         box=box.DOUBLE,
         padding=(0, 0),
@@ -158,13 +161,12 @@ def live_status(pet: Pet, duration: int = 30) -> None:
     from termipet.database import get_session
     from termipet.core.pet_manager import PetManager
 
-    console.print(f"[dim]实时状态模式 — 按 Ctrl+C 退出[/dim]")
+    console.print(f"[dim]{L('status_panel.live_title')}[/dim]")
     start = time.time()
 
     try:
         with Live(console=console, refresh_per_second=1, screen=False) as live:
             while time.time() - start < duration:
-                # 刷新宠物数据
                 session = get_session()
                 try:
                     from termipet.models.pet import Pet as PetModel
@@ -175,27 +177,23 @@ def live_status(pet: Pet, duration: int = 30) -> None:
                         session.commit()
                         panel = build_status_panel(fresh_pet)
                     else:
-                        panel = Panel("[red]宠物数据丢失[/red]")
+                        panel = Panel(f"[red]{L('status_panel.pet_lost')}[/red]")
                 finally:
                     session.close()
 
                 remaining = int(duration - (time.time() - start))
-                footer = Text(f" 倒计时 {remaining}s | Ctrl+C 退出 ", style="dim")
+                footer = Text(
+                    f" {L('status_panel.live_countdown', remaining=remaining)} ",
+                    style="dim",
+                )
                 live.update(Panel(panel, subtitle=footer.plain, border_style="dim"))
                 time.sleep(1)
     except KeyboardInterrupt:
-        console.print("\n[dim]已退出实时状态模式。[/dim]")
+        console.print(f"\n[dim]{L('status_panel.live_exited')}[/dim]")
 
 
 def _get_species_name(key: str) -> str:
-    names = {
-        "cat": "猫型灵兽",
-        "dog": "犬型灵兽",
-        "bird": "鸟型灵兽",
-        "mech": "机械型灵兽",
-        "mystery": "神秘型灵兽",
-    }
-    return names.get(key, key)
+    return L(f"data.species.{key}", key)
 
 
 def print_event_box(title: str, message: str, style: str = "cyan") -> None:
