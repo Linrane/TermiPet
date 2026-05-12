@@ -8,13 +8,13 @@
                                          /_/
 ```
 
-**TermiPet 2.1 — Terminal Digital Pet · Vast Edition**
+**TermiPet 2.2 — Terminal Digital Pet · Vast Edition**
 
 *Guardian of digital life, writing legends of spirit beasts in the terminal*
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.1.0-orange.svg)](pyproject.toml)
+[![Version](https://img.shields.io/badge/Version-2.2.0-orange.svg)](pyproject.toml)
 
 **English** | [中文](README.md)
 
@@ -38,7 +38,7 @@
 
 ## Introduction
 
-TermiPet is a pure Python terminal digital pet system that combines **pet raising, home building, dungeon exploration, skills, collection, and achievements**. Your spirit beast lives in the Data Rift — starting from an egg, growing through seven life stages, and eventually becoming an Ancient legendary being.
+TermiPet is a pure Python terminal digital pet system that combines **pet raising, home building, dungeon exploration, skills, collection, and achievements**. The CLI is fully **bilingual (English + Chinese)**. Your spirit beast lives in the Data Rift — starting from an egg, growing through seven life stages, and eventually becoming an Ancient legendary being.
 
 All interactions happen in the terminal — Rich-powered colorful UI, ASCII art pet sprites, real-time stat decay, making the pet-raising experience both retro and vivid.
 
@@ -82,6 +82,12 @@ All interactions happen in the terminal — Rich-powered colorful UI, ASCII art 
 - **Story Fragments** — Explore the world lore, unlocked through adventure and growth
 - **Collection System** — Collect legendary items
 
+### Bilingual CLI (2.2 New)
+- **Full CLI Bilingual Coverage** — All command output, error messages, status panels support English & Chinese
+- **i18n Translation Engine** — Zero-dependency dictionary-driven, `.format()` parameter interpolation
+- **Runtime Switching** — `pet --lang en` or `pet --lang zh`, instant language toggle
+- **Default Chinese** — Follows the user's config.toml language setting
+
 ### Daily Events System (2.1 New)
 - **Travel Frog Inspired** — Pet acts autonomously while you're away, check "daily event reports" when you return
 - **30 Unique Events** — Categorized into Exploration, Home Life, Social, Weather, Growth, and Species-Specific events
@@ -90,10 +96,12 @@ All interactions happen in the terminal — Rich-powered colorful UI, ASCII art 
 - **Rich Event Descriptions** — Each event has a title, summary, and detailed narrative text
 
 ### Terminal Experience
+- **Bilingual CLI (2.2 New)** — `--lang en` for English UI, runtime dynamic switching
 - **3 Themes** — Cyberpunk (default), Pastel, Minimal
 - **ASCII Art Pets** — Unique sprites for each species and growth stage
 - **Colorful Status Panel** — Stat bars, mood emoji, species colors
 - **Real-time Maze Map** — Explored/unexplored area markers
+- **Fool-proof Design (2.2 New)** — Fuzzy species matching, name sanitization, input validation
 
 ---
 
@@ -131,6 +139,10 @@ If you see the TermiPet help message, installation was successful.
 ## Quick Start
 
 ```bash
+# 0. Choose language (optional, defaults to Chinese)
+pet --lang en                    # English interface
+pet --lang zh                    # Chinese interface
+
 # 1. Adopt a cat-type spirit beast
 pet adopt cat --name "Mochi"
 
@@ -325,6 +337,10 @@ TermiPet/
 │   │   ├── maze_ui.py           # Maze rendering
 │   │   ├── status_panel.py      # Status panel
 │   │   └── themes.py            # 3 theme configs
+│   ├── locale/                  # i18n engine (2.2 new)
+│   │   ├── __init__.py          # t() dict navigation & interpolation
+│   │   ├── zh.py                # Chinese dictionary
+│   │   └── en.py                # English dictionary
 │   └── utils/
 │       └── seeds.py             # Seed data (species / items)
 └── tests/                       # Tests
@@ -383,7 +399,7 @@ animation_speed = "normal"     # Animation speed: fast / normal / slow
 
 <div align="center">
 
-**TermiPet 2.1** — Guard your digital life in the terminal
+**TermiPet 2.2** — Guard your digital life in the terminal
 
 [GitHub Wiki](https://github.com/Linrane/TermiPet/wiki) · [Issues](https://github.com/Linrane/TermiPet/issues)
 

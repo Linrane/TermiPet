@@ -1,6 +1,6 @@
 <div align="center">
 
-**欢迎来到 TermiPet 2.1 Wiki**
+**欢迎来到 TermiPet 2.2 Wiki**
 
 *终端电子宠物 · 浩瀚版 — 官方文档*
 
@@ -25,9 +25,9 @@
 
 ## 关于 TermiPet
 
-TermiPet 是一个纯 Python 编写的终端电子宠物系统，集成养成、家园、Roguelite 探险、技能、收藏与成就于一体。
+TermiPet 是一个纯 Python 编写的终端电子宠物系统，集成养成、家园、Roguelite 探险、技能、收藏与成就于一体，CLI 全面支持中英双语。
 
-- **版本**：2.1.0
+- **版本**：2.2.0
 - **Python**：>= 3.10
 - **协议**：MIT
 - **仓库**：[GitHub](https://github.com/Linrane/TermiPet)

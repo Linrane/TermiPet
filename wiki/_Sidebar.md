@@ -1,4 +1,4 @@
-# TermiPet 2.0 Wiki
+# TermiPet 2.2 Wiki
 
 欢迎来到 **TermiPet 2.0 — 终端电子宠物·浩瀚版** 的官方 Wiki！
 

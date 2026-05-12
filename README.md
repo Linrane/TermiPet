@@ -8,13 +8,13 @@
                                          /_/
 ```
 
-**TermiPet 2.1 — 终端电子宠物 · 浩瀚版**
+**TermiPet 2.2 — 终端电子宠物 · 浩瀚版**
 
 *数字生命守护者，在终端中书写灵兽的传说*
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.1.0-orange.svg)](pyproject.toml)
+[![Version](https://img.shields.io/badge/Version-2.2.0-orange.svg)](pyproject.toml)
 
 [English](README_EN.md) | **中文**
 
@@ -38,7 +38,7 @@
 
 ## 简介
 
-TermiPet 是一个纯 Python 编写的终端电子宠物系统，集**养成、家园、探险、技能、收藏、成就**于一体。你的灵兽生活在数据裂隙之中，从一颗蛋开始，经过七个成长阶段，最终成为远古传说级存在。
+TermiPet 是一个纯 Python 编写的终端电子宠物系统，集**养成、家园、探险、技能、收藏、成就**于一体。CLI 全面支持**中英双语**。你的灵兽生活在数据裂隙之中，从一颗蛋开始，经过七个成长阶段，最终成为远古传说级存在。
 
 所有交互都在终端中完成 —— Rich 库驱动的彩色 UI、ASCII 艺术宠物形象、实时属性衰减，让养宠体验既复古又生动。
 
@@ -82,6 +82,12 @@ TermiPet 是一个纯 Python 编写的终端电子宠物系统，集**养成、�
 - **故事碎片** — 探索世界观，探险/成长时逐步解锁
 - **收藏系统** — 收集传说级物品
 
+### 中英双语（2.2 新增）
+- **全 CLI 双语覆盖** — 所有命令输出、错误消息、状态面板均支持中英文
+- **i18n 翻译引擎** — 零依赖字典驱动，`.format()` 参数化插值
+- **运行时切换** — `pet --lang en` 或 `pet --lang zh`，即时语言切换
+- **默认中文** — 遵循用户 config.toml 的 language 设置
+
 ### 日常事件系统（2.1 新增）
 - **旅行青蛙风格** — 离线期间宠物会自主行动，回来查看"日常事件报告"
 - **30 个独特事件** — 分为外出探索、家园日常、社交互动、天气事件、成长事件、物种特色 6 大类
@@ -90,10 +96,12 @@ TermiPet 是一个纯 Python 编写的终端电子宠物系统，集**养成、�
 - **丰富的事件描述** — 每个事件有标题、摘要和详细故事文本
 
 ### 终端体验
+- **中英双语 CLI（2.2 新增）** — `--lang en` 切换英文界面，运行时动态切换
 - **3 套主题** — 赛博朋克（默认）、柔粉、极简
 - **ASCII 艺术宠物** — 每个物种每个阶段都有独特造型
 - **彩色状态面板** — 属性条、表情反馈、物种色彩
 - **迷宫实时地图** — 已探索/未知区域标记
+- **防呆设计（2.2 新增）** — 模糊物种匹配、名字安全过滤、输入校验
 
 ---
 
@@ -131,6 +139,10 @@ pet --help
 ## 快速开始
 
 ```bash
+# 0. 选择语言（可选，默认中文）
+pet --lang en                    # 英文界面
+pet --lang zh                    # 中文界面
+
 # 1. 领养一只猫型灵兽
 pet adopt cat --name "小橘"
 
@@ -328,6 +340,10 @@ TermiPet/
 │   │   ├── maze_ui.py           # 迷宫渲染
 │   │   ├── status_panel.py      # 状态面板
 │   │   └── themes.py            # 3 套主题配置
+│   ├── locale/                  # 翻译引擎（2.2 新增）
+│   │   ├── __init__.py          # t() 字典导航与插值
+│   │   ├── zh.py                # 中文词典
+│   │   └── en.py                # 英文词典
 │   └── utils/
 │       └── seeds.py             # 种子数据（物种/物品）
 └── tests/                       # 测试
@@ -386,7 +402,7 @@ animation_speed = "normal"     # 动画速度：fast / normal / slow
 
 <div align="center">
 
-**TermiPet 2.1** — 在终端中守护你的数字生命
+**TermiPet 2.2** — 在终端中守护你的数字生命
 
 [GitHub Wiki](https://github.com/Linrane/TermiPet/wiki) · [问题反馈](https://github.com/Linrane/TermiPet/issues)
 
