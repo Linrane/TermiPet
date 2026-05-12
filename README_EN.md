@@ -8,13 +8,13 @@
                                          /_/
 ```
 
-**TermiPet 2.0 — Terminal Digital Pet · Vast Edition**
+**TermiPet 2.1 — Terminal Digital Pet · Vast Edition**
 
 *Guardian of digital life, writing legends of spirit beasts in the terminal*
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.0.0-orange.svg)](pyproject.toml)
+[![Version](https://img.shields.io/badge/Version-2.1.0-orange.svg)](pyproject.toml)
 
 **English** | [中文](README.md)
 
@@ -81,6 +81,13 @@ All interactions happen in the terminal — Rich-powered colorful UI, ASCII art 
 - **Achievement System** — Permanent milestones, unlocking grants Stardust rewards
 - **Story Fragments** — Explore the world lore, unlocked through adventure and growth
 - **Collection System** — Collect legendary items
+
+### Daily Events System (2.1 New)
+- **Travel Frog Inspired** — Pet acts autonomously while you're away, check "daily event reports" when you return
+- **30 Unique Events** — Categorized into Exploration, Home Life, Social, Weather, Growth, and Species-Specific events
+- **Species-Specific Events** — Cat catches data mice, Dog digs holes, Bird sings on rooftops, Mech self-checks, Mystery opens portals
+- **Offline Event Accumulation** — Events accumulate after 30+ minutes offline, max 1 per hour, up to 5 unread
+- **Rich Event Descriptions** — Each event has a title, summary, and detailed narrative text
 
 ### Terminal Experience
 - **3 Themes** — Cyberpunk (default), Pastel, Minimal
@@ -270,6 +277,15 @@ pet story                        # Story fragments
 pet collection                   # Collectibles
 ```
 
+### Daily Events (2.1 New)
+
+```bash
+pet daily                        # View daily event report
+pet daily read <number>          # Read event details
+pet daily --all                  # View all historical events
+pet daily clear                  # Mark all as read
+```
+
 ---
 
 ## Project Structure
@@ -367,7 +383,7 @@ animation_speed = "normal"     # Animation speed: fast / normal / slow
 
 <div align="center">
 
-**TermiPet 2.0** — Guard your digital life in the terminal
+**TermiPet 2.1** — Guard your digital life in the terminal
 
 [GitHub Wiki](https://github.com/Linrane/TermiPet/wiki) · [Issues](https://github.com/Linrane/TermiPet/issues)
 

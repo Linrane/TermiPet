@@ -110,6 +110,7 @@ class Pet(Base):
     achievements = relationship("Achievement", back_populates="pet", cascade="all, delete-orphan")
     maze_state = relationship("MazeState", back_populates="pet", uselist=False, cascade="all, delete-orphan")
     story_fragments = relationship("StoryFragment", back_populates="pet", cascade="all, delete-orphan")
+    daily_event_logs = relationship("DailyEventLog", back_populates="pet", cascade="all, delete-orphan")
 
     # ── 属性便利方法 ─────────────────────────────────────────────────────────
     @property

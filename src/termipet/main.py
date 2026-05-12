@@ -31,7 +31,7 @@ BANNER = r"""
                                          /_/
 """
 
-BANNER_SIMPLE = "✦ TermiPet 2.0  终端电子宠物·浩瀚版 ✦"
+BANNER_SIMPLE = "✦ TermiPet 2.1  终端电子宠物·浩瀚版 ✦"
 
 
 def print_banner():
@@ -54,7 +54,7 @@ def print_banner():
 @click.pass_context
 def cli(ctx):
     """
-    TermiPet 2.0 — 终端电子宠物·浩瀚版
+    TermiPet 2.1 — 终端电子宠物·浩瀚版
 
     \b
     快速开始：
@@ -87,6 +87,7 @@ def _register_commands():
         from termipet.commands.social_cmd import (
             quests_cmd, achievements_cmd, story_cmd, collection_cmd
         )
+        from termipet.commands.daily_cmd import daily_group
 
         cli.add_command(adopt_cmd,       "adopt")
         cli.add_command(status_cmd,      "status")
@@ -104,6 +105,7 @@ def _register_commands():
         cli.add_command(achievements_cmd,"achievements")
         cli.add_command(story_cmd,       "story")
         cli.add_command(collection_cmd,  "collection")
+        cli.add_command(daily_group,     "daily")
 
     except ImportError as e:
         console.print(f"[red]命令加载失败：{e}[/red]")

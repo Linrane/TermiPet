@@ -6,6 +6,7 @@ from termipet.models.skill import Skill
 from termipet.models.quest import Quest, Achievement
 from termipet.models.maze import MazeState
 from termipet.models.story import StoryFragment
+from termipet.models.daily_event import DailyEventLog
 
 __all__ = [
     "Pet", "Species",
@@ -15,4 +16,5 @@ __all__ = [
     "Quest", "Achievement",
     "MazeState",
     "StoryFragment",
+    "DailyEventLog",
 ]

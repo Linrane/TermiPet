@@ -115,6 +115,32 @@ def status_cmd(live: bool):
             panel = build_status_panel(pet)
             console.print(panel)
 
+            # 日常事件检查
+            from termipet.core.daily_events import DailyEventSystem
+            des = DailyEventSystem(session)
+            new_events = des.check_and_generate(pet)
+            if new_events:
+                session.commit()
+                unread_count = sum(1 for e in des.get_unread_events(pet))
+                console.print()
+                print_event_box(
+                    f"📬 {pet.name} 有 {unread_count} 条日常事件！",
+                    f"它在你离开期间做了 {len(new_events)} 件事。使用 [bold cyan]pet daily[/] 查看。",
+                    style="cyan",
+                )
+
+            # 低属性预警
+            warnings = []
+            if pet.hunger < 15:
+                warnings.append(f"[red]饱腹度 {pet.hunger:.0f} — 快饿坏了！[/red]")
+            if pet.health < 15:
+                warnings.append(f"[red]健康值 {pet.health:.0f} — 需要治疗！[/red]")
+            if pet.energy < 10:
+                warnings.append(f"[yellow]精力 {pet.energy:.0f} — 快累垮了！[/yellow]")
+            if warnings:
+                console.print()
+                print_warning("⚠ 属性预警：" + " | ".join(warnings))
+
             # 随机事件检查
             em = EventManager(session)
             event = em.maybe_trigger(pet, base_chance=0.1)
@@ -138,6 +164,10 @@ def feed_cmd(item: str | None):
     try:
         pm = PetManager(session)
         pet = pm.require_active_pet()
+
+        if pet.hunger >= 95:
+            print_warning(f"{pet.name} 已经吃饱了，再喂会撑坏的！")
+            return
 
         # 动画
         with console.status(f"[cyan]正在喂食 {pet.name}……[/cyan]", spinner="hearts"):
@@ -190,6 +220,10 @@ def play_cmd():
         pm = PetManager(session)
         pet = pm.require_active_pet()
 
+        if pet.happiness >= 98:
+            print_info(f"{pet.name} 已经开心到飞起了，让它休息一下吧~")
+            return
+
         with console.status(f"[cyan]和 {pet.name} 玩耍中……[/cyan]", spinner="hearts"):
             time.sleep(1.0)
             result = pm.play(pet)
@@ -224,6 +258,10 @@ def clean_cmd():
     try:
         pm = PetManager(session)
         pet = pm.require_active_pet()
+
+        if pet.cleanliness >= 95:
+            print_info(f"{pet.name} 已经干干净净了，不用再洗啦~")
+            return
 
         with console.status(f"[cyan]正在给 {pet.name} 洗澡……[/cyan]", spinner="line"):
             time.sleep(0.8)
@@ -260,6 +298,10 @@ def sleep_cmd(hours: float):
         pm = PetManager(session)
         pet = pm.require_active_pet()
 
+        if pet.energy >= 95:
+            print_info(f"{pet.name} 精力充沛，根本睡不着！")
+            return
+
         with console.status(f"[cyan]{pet.name} 进入梦乡……（{hours:.1f}小时）[/cyan]", spinner="moon"):
             time.sleep(1.0)
             result = pm.sleep(pet, hours)
@@ -288,6 +330,10 @@ def train_cmd(skill_name: str):
         pm = PetManager(session)
         pet = pm.require_active_pet()
         ss = SkillSystem(session)
+
+        if pet.stage == "蛋":
+            print_info("蛋还没孵化呢！等它孵出来再训练吧。")
+            return
 
         pm.apply_decay(pet)
 

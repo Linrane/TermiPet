@@ -212,6 +212,11 @@ def home_craft_cmd(recipe: str):
     try:
         pm = PetManager(session)
         pet = pm.require_active_pet()
+
+        if pet.stage == "蛋":
+            print_info("蛋还没孵化，无法使用工坊！等它孵出来再说吧。")
+            return
+
         cm = CraftingManager(session)
 
         with console.status(f"[cyan]正在制作「{recipe}」……[/cyan]", spinner="dots"):

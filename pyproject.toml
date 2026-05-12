@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "termipet"
-version = "2.0.0"
-description = "TermiPet 2.0 - 终端电子宠物·浩瀚版"
+version = "2.1.0"
+description = "TermiPet 2.1 - 终端电子宠物·浩瀚版"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}

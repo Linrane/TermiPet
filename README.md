@@ -8,13 +8,13 @@
                                          /_/
 ```
 
-**TermiPet 2.0 — 终端电子宠物 · 浩瀚版**
+**TermiPet 2.1 — 终端电子宠物 · 浩瀚版**
 
 *数字生命守护者，在终端中书写灵兽的传说*
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.0.0-orange.svg)](pyproject.toml)
+[![Version](https://img.shields.io/badge/Version-2.1.0-orange.svg)](pyproject.toml)
 
 [English](README_EN.md) | **中文**
 
@@ -81,6 +81,13 @@ TermiPet 是一个纯 Python 编写的终端电子宠物系统，集**养成、�
 - **成就系统** — 永久里程碑，解锁获得星尘奖励
 - **故事碎片** — 探索世界观，探险/成长时逐步解锁
 - **收藏系统** — 收集传说级物品
+
+### 日常事件系统（2.1 新增）
+- **旅行青蛙风格** — 离线期间宠物会自主行动，回来查看"日常事件报告"
+- **30 个独特事件** — 分为外出探索、家园日常、社交互动、天气事件、成长事件、物种特色 6 大类
+- **物种专属事件** — 猫抓数据老鼠、犬挖坑、鸟屋顶唱歌、机械自检、神秘传送门
+- **离线事件积累** — 离线超过 30 分钟开始积累，每小时最多 1 个，最多 5 个未读
+- **丰富的事件描述** — 每个事件有标题、摘要和详细故事文本
 
 ### 终端体验
 - **3 套主题** — 赛博朋克（默认）、柔粉、极简
@@ -270,6 +277,15 @@ pet story                        # 故事碎片
 pet collection                   # 收藏品
 ```
 
+### 日常事件（2.1 新增）
+
+```bash
+pet daily                        # 查看日常事件报告
+pet daily read <序号>             # 阅读事件详情
+pet daily --all                  # 查看所有历史事件
+pet daily clear                  # 标记全部已读
+```
+
 ---
 
 ## 项目结构
@@ -289,7 +305,8 @@ TermiPet/
 │   │   ├── skill.py             # Skill + 技能定义
 │   │   ├── quest.py             # Quest + Achievement
 │   │   ├── maze.py              # MazeState
-│   │   └── story.py             # StoryFragment
+│   │   ├── story.py             # StoryFragment
+│   │   └── daily_event.py       # DailyEventLog（日常事件）
 │   ├── core/                    # 核心业务逻辑
 │   │   ├── pet_manager.py       # 属性衰减/互动/成长
 │   │   ├── adventure.py         # 迷宫生成与事件
@@ -297,13 +314,15 @@ TermiPet/
 │   │   ├── economy.py           # 经济系统
 │   │   ├── crafting.py          # 制作系统
 │   │   ├── quests.py            # 任务/成就管理
-│   │   └── events.py            # 事件系统
+│   │   ├── events.py            # 随机事件系统
+│   │   └── daily_events.py      # 日常事件系统（2.1 新增）
 │   ├── commands/                # CLI 子命令
 │   │   ├── pet_cmd.py           # adopt/status/feed/play/...
 │   │   ├── adventure_cmd.py     # adventure start/move/auto/...
 │   │   ├── home_cmd.py          # home status/upgrade/craft
 │   │   ├── shop_cmd.py          # shop list/buy/sell
-│   │   └── social_cmd.py        # quests/achievements/story
+│   │   ├── social_cmd.py        # quests/achievements/story
+│   │   └── daily_cmd.py         # daily view/read/clear（2.1 新增）
 │   ├── display/                 # 终端 UI
 │   │   ├── ascii_library.py     # ASCII 艺术宠物
 │   │   ├── maze_ui.py           # 迷宫渲染
@@ -367,7 +386,7 @@ animation_speed = "normal"     # 动画速度：fast / normal / slow
 
 <div align="center">
 
-**TermiPet 2.0** — 在终端中守护你的数字生命
+**TermiPet 2.1** — 在终端中守护你的数字生命
 
 [GitHub Wiki](https://github.com/Linrane/TermiPet/wiki) · [问题反馈](https://github.com/Linrane/TermiPet/issues)
 

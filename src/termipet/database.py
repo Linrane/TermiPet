@@ -52,5 +52,5 @@ def get_session() -> Session:
 def init_db() -> None:
     """创建所有表（首次运行时调用）"""
     # 延迟导入，确保所有模型都已注册
-    from termipet.models import pet, item, home, skill, quest, maze, story  # noqa: F401
+    from termipet.models import pet, item, home, skill, quest, maze, story, daily_event  # noqa: F401
     Base.metadata.create_all(get_engine())
